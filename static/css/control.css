@@ -23,7 +23,13 @@
     transition: transform 0.2s;
 }
 
-.grid-item:hover {
+/* .grid-item:hover {
+    transform: scale(1.01);
+    background-color: #e0e0e0;
+} */
+
+.grid-item:active,
+.grid-item.pressed {
     transform: scale(1.01);
     background-color: #e0e0e0;
 }
