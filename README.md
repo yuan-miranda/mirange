@@ -1,1 +1,2 @@
-# picowcontrol.github.io
+# mirange
+controller for my LCD display module
