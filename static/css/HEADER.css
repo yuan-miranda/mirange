@@ -1,0 +1,48 @@
+.header-container {
+    display: flex;
+    flex-direction: column;
+    background-color: #F5F5F5;
+    padding: 0.25rem 0.5rem 0 0.5rem;
+    border-bottom: solid 0.1rem #D3D3D3;
+    box-shadow: 0 0.1rem 0.1rem #D3D3D3;
+}
+
+.ribbon {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.ribbon {
+    margin-bottom: 0.25rem;
+}
+
+.ribbon-actions ul {
+    display: flex;
+    flex-direction: row;
+    list-style-type: none;
+}
+
+.ribbon-actions ul li {
+    margin-right: 0.5rem;
+}
+
+.ribbon-actions ul li:hover,
+.ribbon-actions ul li.active {
+    text-decoration: underline !important;
+}
+
+.ribbon-actions ul li:last-child {
+    margin-right: 0;
+}
+
+#colorSizeStatus {
+    padding: 0.5rem;
+    color: white;
+    margin-left: auto;
+    outline: solid 0.1rem black;
+}
+
+.main-header {
+    margin: 0 0 0 auto;
+}

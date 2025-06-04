@@ -1,0 +1,141 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    overscroll-behavior: none;
+    user-select: none;
+    height: 100%;
+}
+
+html {
+    /* 1rem = 16px */
+    font-size: 16px;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #F5F5F5;
+    display: flex;
+    flex-direction: column;
+}
+
+img {
+    width: 2rem;
+    /* remove the wierd space below the image */
+    display: block;
+    cursor: pointer;
+}
+
+/* takes all the remaining space after header */
+.container {
+    flex: auto;
+}
+
+/* takes all the size of container */
+.content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+.container.visible {
+    display: auto;
+}
+
+.container.hidden {
+    display: none;
+}
+
+/* Credit: https://stackoverflow.com/a/7354648
+ */
+@media (max-width:320px) {
+    html {
+        font-size: 6px;
+    }
+
+    #colorSizeStatus {
+        background-color: white;
+    }
+
+    .launcher-panel.active {
+        width: 100%;
+    }
+}
+
+@media (min-width:320px) {
+
+    /* smartphones, portrait iPhone, portrait 480x320 phones (Android) */
+    html {
+        font-size: 8px;
+    }
+
+    #colorSizeStatus {
+        background-color: black;
+    }
+}
+
+@media (min-width:360px) {
+
+    /* smartphones, portrait iPhone, portrait 480x320 phones (Android) */
+    html {
+        font-size: 8px;
+    }
+
+    #colorSizeStatus {
+        background-color: red;
+    }
+}
+
+@media (min-width:768px) {
+
+    /* smartphones, Android phones, landscape iPhone */
+    html {
+        font-size: 16px;
+    }
+
+    #colorSizeStatus {
+        background-color: green;
+    }
+}
+
+@media (min-width:1024px) {
+
+    /* portrait tablets, portrait iPad, e-readers (Nook/Kindle), landscape 800x480 phones (Android) */
+    html {
+        font-size: 22px;
+    }
+
+    #colorSizeStatus {
+        background-color: blue;
+    }
+}
+
+@media (min-width:1400px) {
+
+    /* tablet, landscape iPad, lo-res laptops ands desktops */
+    html {
+        font-size: 28px;
+    }
+
+    #colorSizeStatus {
+        background-color: yellow;
+    }
+}
+
+@media (min-width:1920px) {
+
+    /* big landscape tablets, laptops, and desktops */
+    html {
+        font-size: 32px;
+    }
+
+    #colorSizeStatus {
+        background-color: orange;
+    }
+}
