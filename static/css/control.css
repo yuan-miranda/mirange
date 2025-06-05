@@ -35,32 +35,32 @@
 }
 
 /* positions of buttons */
-.item1 {
+.control-w {
     grid-column: 1;
     grid-row: 1;
 }
 
-.item2 {
+.control-s {
     grid-column: 1;
     grid-row: 2;
 }
 
-.item3 {
+.control-e {
     grid-column: 2;
     grid-row: 1;
 }
 
-.item4 {
+.control-f {
     grid-column: 3;
     grid-row: 2;
 }
 
-.item5 {
+.control-a {
     grid-column: 3;
     grid-row: 1;
 }
 
-.item6 {
+.control-d {
     grid-column: 4;
     grid-row: 1;
 }
