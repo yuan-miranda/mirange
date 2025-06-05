@@ -45,27 +45,12 @@ function addActiveClassToRibbonBtn(btn) {
 
 function ribbonActionsBtnListener() {
     const controlBtn = document.getElementById("control");
-    const joystickBtn = document.getElementById("joystick");
-    const recordedBtn = document.getElementById("recorded");
-    const drawingBtn = document.getElementById("drawing");
     const settingsBtn = document.getElementById("settings");
     const moreBtn = document.getElementById("more");
 
     controlBtn.addEventListener("click", () => {
         addActiveClassToRibbonBtn(controlBtn);
         window.location.href = "../html/control.html";
-    });
-    joystickBtn.addEventListener("click", () => {
-        addActiveClassToRibbonBtn(joystickBtn);
-        window.location.href = "../html/joystick.html";
-    });
-    recordedBtn.addEventListener("click", () => {
-        addActiveClassToRibbonBtn(recordedBtn);
-        window.location.href = "../html/recorded.html";
-    });
-    drawingBtn.addEventListener("click", () => {
-        addActiveClassToRibbonBtn(drawingBtn);
-        window.location.href = "../html/drawing.html";
     });
     settingsBtn.addEventListener("click", () => {
         addActiveClassToRibbonBtn(settingsBtn);
