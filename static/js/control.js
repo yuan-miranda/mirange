@@ -1,34 +1,10 @@
 import { loadHeader } from "./HEADER.js";
 
-let lastSentState = null;
-let correctionSent = false;
-
-async function sendControlStates(controlStates) {
-    // this wierd condition is used to prevent the race condition where because of "uasyncio" asynchronous
-    // nature of the code the request are sent in non-sequential order i.e
-    // 
-    // [00:00:00:58] [handle_request()] [INFO] Request: GET /control/100000
-    // [00:00:00:59] [handle_request()] [INFO] Request: GET /control/100010
-    // [00:00:00:59] [handle_request()] [INFO] Request: GET /control/000000
-    // [00:00:00:59] [send_response()] [INFO] Request: GET /control/000010
-    // 
-    // this code is used to "forcefully" send another 000000 to hopefully be the last request to be processed
-    // by the server lol.
-    if (controlStates === '000000') {
-        if (lastSentState !== '000000' && !correctionSent) {
-            correctionSent = true;
-            lastSentState = '000000';
-
-            await fetch(`/control/${controlStates}`);
-            await fetch(`/control/${controlStates}`);
-            return;
-        }
-    } else correctionSent = false;
-
-    lastSentState = controlStates;
-    await fetch(`/control/${controlStates}`);
+let requestQueue = Promise.resolve();
+function sendControlStates(controlStates) {
+    requestQueue = requestQueue.then(() => fetch(`/control/${controlStates}`));
+    // await requestQueue;
 }
-
 
 function getControlStates() {
     const controlStates = [];
@@ -38,49 +14,42 @@ function getControlStates() {
     return controlStates.join('');
 }
 
-// async function toggleControlState(gridItem) {
-//     gridItem.classList.toggle("active");
-//     const controlStates = getControlStates();
-//     await sendControlStates(controlStates);
-// }
-
-async function pressedState(item) {
+function pressedState(item) {
     item.classList.add('pressed');
     item.classList.add('active');
-    await sendControlStates(getControlStates());
+    sendControlStates(getControlStates());
 }
 
-async function releasedState(item) {
+function releasedState(item) {
     item.classList.remove('pressed');
     item.classList.remove('active');
-    await sendControlStates(getControlStates());
+    sendControlStates(getControlStates());
 }
 
-async function gridItemListener() {
+function gridItemListener() {
     document.querySelectorAll('.grid-item').forEach(item => {
         let touchStartTimeout;
         let validTouch = false;
 
         item.addEventListener('touchstart', () => {
             validTouch = false;
-            touchStartTimeout = setTimeout(async () => {
+            touchStartTimeout = setTimeout(() => {
                 validTouch = true;
-                await pressedState(item);
-                await new Promise(resolve => setTimeout(resolve, 100));
-            }, 100);
+                pressedState(item);
+            }, 200);
         });
 
-        item.addEventListener('touchend', async () => {
+        item.addEventListener('touchend', () => {
             clearTimeout(touchStartTimeout);
             if (validTouch) {
-                await releasedState(item);
+                releasedState(item);
             }
         });
 
-        item.addEventListener('touchcancel', async () => {
+        item.addEventListener('touchcancel', () => {
             clearTimeout(touchStartTimeout);
             if (validTouch) {
-                await releasedState(item);
+                releasedState(item);
             }
         });
     });
@@ -88,5 +57,5 @@ async function gridItemListener() {
 
 document.addEventListener("DOMContentLoaded", async () => {
     await loadHeader();
-    await gridItemListener();
+    gridItemListener();
 });
