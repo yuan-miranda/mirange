@@ -66,13 +66,13 @@ async function gridItemListener() {
             touchStartTimeout = setTimeout(async () => {
                 validTouch = true;
                 await pressedState(item);
+                await new Promise(resolve => setTimeout(resolve, 100));
             }, 100);
         });
 
         item.addEventListener('touchend', async () => {
             clearTimeout(touchStartTimeout);
             if (validTouch) {
-                await new Promise(resolve => setTimeout(resolve, 100));
                 await releasedState(item);
             }
         });
@@ -80,7 +80,6 @@ async function gridItemListener() {
         item.addEventListener('touchcancel', async () => {
             clearTimeout(touchStartTimeout);
             if (validTouch) {
-                await new Promise(resolve => setTimeout(resolve, 100));
                 await releasedState(item);
             }
         });
