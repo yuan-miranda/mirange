@@ -9,6 +9,38 @@
     <link rel="stylesheet" href="../css/settings.css">
     <link rel="stylesheet" href="../css/HEADER.css">
     <link rel="stylesheet" href="../css/BASE.css">
+    <style>
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .content {
+            display: flex;
+            flex-direction: row;
+            gap: 5rem;
+        }
+
+        .content div {
+            display: flex;
+            flex-direction: column;
+        }
+
+        input {
+            padding: 1rem;
+            font-size: 1.5rem;
+            text-align: center;
+        }
+
+        button {
+            padding: 0.5rem;
+            margin-top: 0.25rem;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+    </style>
 </head>
 
 <body>
@@ -16,11 +48,51 @@
     </header>
     <div class="container">
         <div class="content">
-            Settings
+            <div>
+                <input type="text" class="player-input player-one" placeholder="Player One">
+                <button class="ready-button player-one-button" data-player="1" disabled>
+                    ENTER
+                </button>
+            </div>
+            <div>
+                <input type="text" class="player-input player-two" placeholder="Player Two">
+                <button class="ready-button player-two-button" data-player="2" disabled>
+                    ENTER
+                </button>
+            </div>
         </div>
     </div>
 
     <script type="module" src="../js/settings.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const playerInputs = document.querySelectorAll('.player-input');
+
+            playerInputs.forEach(input => {
+                const readyButton = input.nextElementSibling;
+                readyButton.addEventListener('click', () => {
+                    
+                });
+                input.addEventListener('input', () => {
+                    if (input.value.trim() === '') {
+                        readyButton.disabled = true;
+                    } else {
+                        readyButton.disabled = false;
+                    }
+                });
+
+                input.addEventListener('dblclick', () => {
+                    if (input.value == '') {
+                        input.value = `${navigator.platform} (You)`;
+                        readyButton.disabled = false;
+                    } else {
+                        input.value = '';
+                        readyButton.disabled = true;
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 
 </html>

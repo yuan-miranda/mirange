@@ -4,11 +4,13 @@
 
 TFT_eSPI tft = TFT_eSPI();
 String text = "";
+String prevText = "";
 
 void setup(void)
 {
     tft.begin();
     tft.setRotation(1);
+    tft.fillScreen(TFT_BLACK);
     tft.setTextDatum(MC_DATUM);
     tft.setTextColor(TFT_WHITE, TFT_BLACK);
 
@@ -21,10 +23,13 @@ void loop()
     if (Serial2.available())
     {
         text = Serial2.readStringUntil('\n');
+        if (text != prevText)
+        {
+            prevText = text;
+            tft.setFreeFont(FF18);
+            tft.drawString(text, 160, 120, GFXFF);
+        }
     }
-
-    tft.setFreeFont(FF18);
-    tft.drawString(text, 160, 120, GFXFF);
 }
 
 #ifndef LOAD_GLCD
