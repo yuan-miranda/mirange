@@ -45,16 +45,16 @@ function addActiveClassToRibbonBtn(btn) {
 
 function ribbonActionsBtnListener() {
     const controlBtn = document.getElementById("control");
-    const settingsBtn = document.getElementById("settings");
+    const lobbyBtn = document.getElementById("lobby");
     const moreBtn = document.getElementById("more");
 
     controlBtn.addEventListener("click", () => {
         addActiveClassToRibbonBtn(controlBtn);
         window.location.href = "../html/control.html";
     });
-    settingsBtn.addEventListener("click", () => {
-        addActiveClassToRibbonBtn(settingsBtn);
-        window.location.href = "../html/settings.html";
+    lobbyBtn.addEventListener("click", () => {
+        addActiveClassToRibbonBtn(lobbyBtn);
+        window.location.href = "../html/lobby.html";
     });
     moreBtn.addEventListener("click", () => {
         // load the rest of "li" elements to the list
