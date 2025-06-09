@@ -26,7 +26,7 @@ function releasedState(item) {
     sendControlStates(getControlStates());
 }
 
-function gridItemListener() {
+function gridItemsTouchListener() {
     document.querySelectorAll('.grid-item').forEach(item => {
         let touchStartTimeout;
         let validTouch = false;
@@ -55,7 +55,38 @@ function gridItemListener() {
     });
 }
 
+function gridItemsKeyListener() {
+    const keyMap = {
+        'w': 'controlW',
+        'a': 'controlA',
+        's': 'controlS',
+        'd': 'controlD',
+        'e': 'controlE',
+        'f': 'controlF'
+    };
+
+    const activeKeys = new Set();
+
+    document.addEventListener('keydown', (event) => {
+        const key = event.key.toLowerCase();
+        if (keyMap[key] && !activeKeys.has(key)) {
+            const item = document.getElementById(keyMap[key]);
+            activeKeys.add(key);
+            pressedState(item);
+        }
+    });
+    document.addEventListener('keyup', (event) => {
+        const key = event.key.toLowerCase();
+        if (keyMap[key] && activeKeys.has(key)) {
+            const item = document.getElementById(keyMap[key]);
+            activeKeys.delete(key);
+            releasedState(item);
+        }
+    });
+}
+
 document.addEventListener("DOMContentLoaded", async () => {
     await loadHeader();
-    gridItemListener();
+    gridItemsTouchListener();
+    gridItemsKeyListener();
 });
