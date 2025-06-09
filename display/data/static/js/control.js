@@ -36,7 +36,7 @@ function gridItemListener() {
             touchStartTimeout = setTimeout(() => {
                 validTouch = true;
                 pressedState(item);
-            }, 200);
+            }, 10);
         });
 
         item.addEventListener('touchend', () => {
