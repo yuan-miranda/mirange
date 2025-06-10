@@ -39,7 +39,8 @@ function playerSlotListener() {
 
                 // if you're in slot1 and switched to slot2, remove the value of slot1
                 const otherInput = document.querySelector(`.player-slot.${playerSlot === 'one' ? 'two' : 'one'}`);
-                if (otherInput.value === playerName) {
+                
+                if (otherInput.value === `${playerName} (You)`) {
                     socket.send(JSON.stringify({
                         type: 'setPlayerSlot',
                         slot: playerSlot === 'one' ? 'two' : 'one',
@@ -49,7 +50,7 @@ function playerSlotListener() {
             }
             // remove the current player in the slot
             else {
-                if (input.value === getPlayerName()) {
+                if (input.value === `${playerName} (You)`) {
                     localStorage.removeItem('playerSlot');
                     localStorage.removeItem('playerName');
                 }
@@ -86,7 +87,8 @@ function handleWebSocketMessage(event) {
         const button = input.nextElementSibling;
 
         if (data.name) {
-            input.value = data.name;
+            const playerName = getPlayerName();
+            input.value = data.name === playerName ? `${data.name} (You)` : data.name;
             button.disabled = false;
         } else {
             input.value = '';
@@ -98,7 +100,8 @@ function handleWebSocketMessage(event) {
             const input = document.querySelector(`.player-slot.${slot}`);
             const button = input.nextElementSibling;
 
-            input.value = name || '';
+            const playerName = getPlayerName();
+            input.value = name === playerName ? `${name} (You)` : name || '';
             button.disabled = !name;
         });
         loadPlayerSlot();
