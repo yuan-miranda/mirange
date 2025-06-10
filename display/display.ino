@@ -1,6 +1,8 @@
 #include <WiFi.h>
+#include <AsyncTCP.h>
 #include <ESPAsyncWebServer.h>
 #include <LittleFS.h>
+#include <ArduinoJson.h>
 // #include "Free_Fonts.h"
 #include "SPI.h"
 #include "TFT_eSPI.h"
@@ -10,9 +12,32 @@ const char *password = "123456789";
 const int port = 80;
 
 AsyncWebServer server(port);
+AsyncWebSocket ws("/ws");
 TFT_eSPI tft = TFT_eSPI();
 
 String controlStates = "000000"; // W, S, E, F, A, D
+
+struct PlayerSlot
+{
+    String slot;
+    String name;
+};
+
+PlayerSlot playerSlots[2] = {
+    {"one", ""},
+    {"two", ""}};
+
+void setPlayerSlot(const char *slot, const char *name)
+{
+    for (int i = 0; i < 2; ++i)
+    {
+        if (playerSlots[i].slot == slot)
+        {
+            playerSlots[i].name = name;
+            break;
+        }
+    }
+}
 
 void initAP()
 {
@@ -82,6 +107,61 @@ void handleRequest(AsyncWebServerRequest *request)
     }
 }
 
+void onWebSocketEvent(AsyncWebSocket *server, AsyncWebSocketClient *client, AwsEventType type, void *arg, uint8_t *data, size_t len)
+{
+    if (type == WS_EVT_CONNECT)
+    {
+        Serial.printf("WebSocket client connected: %u\n", client->id());
+
+        StaticJsonDocument<256> doc;
+        doc["type"] = "wsLoadPlayerSlots";
+        JsonObject slots = doc.createNestedObject("slots");
+
+        for (const PlayerSlot &slot : playerSlots)
+            slots[slot.slot] = slot.name;
+
+        // send to the newly connected client all player slots
+        String response;
+        serializeJson(doc, response);
+        client->text(response);
+    }
+    else if (type == WS_EVT_DISCONNECT)
+        Serial.printf("WebSocket client disconnected: %u\n", client->id());
+
+    else if (type == WS_EVT_DATA)
+    {
+        data[len] = 0;
+        Serial.println("WS_Received: " + String((char *)data));
+
+        StaticJsonDocument<256> doc;
+        DeserializationError error = deserializeJson(doc, data);
+        if (error)
+        {
+            Serial.println(error.c_str());
+            return;
+        }
+
+        // update player slot on all connected clients
+        const char *type = doc["type"];
+        if (strcmp(type, "setPlayerSlot") == 0)
+        {
+            const char *slot = doc["slot"];
+            const char *name = doc["name"];
+
+            setPlayerSlot(slot, name);
+
+            StaticJsonDocument<256> responseDoc;
+            responseDoc["type"] = "wsUpdatePlayerSlot";
+            responseDoc["slot"] = slot;
+            responseDoc["name"] = name;
+
+            String response;
+            serializeJson(responseDoc, response);
+            server->textAll(response);
+        }
+    }
+}
+
 void setup(void)
 {
     Serial.begin(115200);
@@ -123,6 +203,9 @@ void setup(void)
 
     server.onNotFound(handleRequest);
     server.begin();
+
+    ws.onEvent(onWebSocketEvent);
+    server.addHandler(&ws);
 }
 
 void loop()
